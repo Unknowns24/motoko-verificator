@@ -32,6 +32,20 @@ actor class Verifier() {
     }
   };
 
+  public shared ({ caller }) func imRegistered() : async Bool {
+    var xProfile : ?StudentProfile = studentProfileStore.get(caller);
+
+    switch (xProfile) {
+      case null { 
+        return false;
+      };
+
+      case (?profile) {
+        return true
+      };
+    }
+  };
+
   // STEP 1 - BEGIN
 
   public shared ({ caller }) func addMyProfile(profile : StudentProfile) : async Result.Result<(), Text> {
