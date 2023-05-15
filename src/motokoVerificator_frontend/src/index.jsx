@@ -5,8 +5,6 @@ import { BrowserRouter } from "react-router-dom";
 
 import App from "./App";
 
-//import { motokoVerificator_backend } from "@declarations/motokoVerificator_backend";
-
 const root = createRoot(document.getElementById("app"));
 
 root.render(

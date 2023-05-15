@@ -10,8 +10,6 @@ const frontendDirectory = "motokoVerificator_frontend";
 const frontend_entry = path.join("src", frontendDirectory, "src", "index.html");
 const declarationsDir = "declarations";
 
-console.log("backend: ", process.env.CANISTER_ID_BACKEND);
-
 module.exports = {
 	target: "web",
 	mode: isDevelopment ? "development" : "production",
@@ -42,7 +40,7 @@ module.exports = {
 			"@routes": path.resolve(__dirname, "src", frontendDirectory, "src/routes"),
 			"@layout": path.resolve(__dirname, "src", frontendDirectory, "src/layout"),
 			"@images": path.resolve(__dirname, "src", frontendDirectory, "src/images"),
-			"@context": path.resolve(__dirname, "src", frontendDirectory, "src/context"),
+			"@validations": path.resolve(__dirname, "src", frontendDirectory, "src/validations"),
 			"@components": path.resolve(__dirname, "src", frontendDirectory, "src/components"),
 
 			//backend

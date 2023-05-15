@@ -1,5 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { AuthRoute } from "@validations/RoutesValidation";
+
 import Home from "@pages/Home";
 import Verificator from "@pages/Verificator";
 import Profile from "@pages/Profile";
@@ -9,8 +11,33 @@ const Router = () => {
 	return (
 		<Routes>
 			<Route path="/" exact element={<Home />} />
-			<Route path="/verificator" exact element={<Verificator />} />
-			<Route path="/profile" exact element={<Profile />} />
+			<Route
+				path="/verificator"
+				exact
+				element={
+					<AuthRoute>
+						<Verificator />
+					</AuthRoute>
+				}
+			/>
+			<Route
+				path="/profile"
+				exact
+				element={
+					<AuthRoute>
+						<Profile />
+					</AuthRoute>
+				}
+			/>
+			<Route
+				path="/user"
+				exact
+				element={
+					<AuthRoute>
+						<Profile />
+					</AuthRoute>
+				}
+			/>
 			<Route path="*" element={<Error404 />} />
 		</Routes>
 	);

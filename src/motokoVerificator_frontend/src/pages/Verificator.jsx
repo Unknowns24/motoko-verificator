@@ -1,7 +1,13 @@
 import React from "react";
+import Navbar from "@components/Navbar/index";
 
 const Verificator = () => {
-	return <div>Verificator</div>;
+	return (
+		<>
+			<Navbar />
+			<div>Verificator</div>
+		</>
+	);
 };
 
 export default Verificator;

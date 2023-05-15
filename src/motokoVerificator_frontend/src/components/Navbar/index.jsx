@@ -47,29 +47,3 @@ const Navbar = ({ toggle }) => {
 };
 
 export default Navbar;
-
-/*
-	{!auth && (window.location.pathname === "/" || window.location.pathname === "/signup") ? (
-						<NavButton>
-							<NavBtnLink to="/signin">Sign In</NavBtnLink>
-						</NavButton>
-					) : (
-						""
-					)}
-
-					{!auth && window.location.pathname === "/signin" ? (
-						<NavButton>
-							<NavBtnLink to="/signup">Sign Up</NavBtnLink>
-						</NavButton>
-					) : (
-						""
-					)}
-
-					{auth ? (
-						<NavButton>
-							<NavBtnLink to="/panel/dashboard">Customer Area</NavBtnLink>
-						</NavButton>
-					) : (
-						""
-					)}
-*/

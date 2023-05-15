@@ -1,6 +1,8 @@
 import { AuthClient } from "@dfinity/auth-client";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
+import { canisterId, createActor, motokoVerificator_backend } from "@declarations/motokoVerificator_backend";
+
 const AuthContext = createContext();
 
 const defaultOptions = {
@@ -33,6 +35,7 @@ export const useAuthClient = (options = defaultOptions) => {
 	const [authClient, setAuthClient] = useState(null);
 	const [identity, setIdentity] = useState(null);
 	const [principal, setPrincipal] = useState(null);
+	const [backendActor, setBackendActor] = useState(null);
 
 	useEffect(() => {
 		// Initialize AuthClient
@@ -41,7 +44,7 @@ export const useAuthClient = (options = defaultOptions) => {
 		});
 	}, []);
 
-	const login = () => {
+	const login = async () => {
 		authClient.login({
 			...options.loginOptions,
 			onSuccess: () => {
@@ -61,6 +64,14 @@ export const useAuthClient = (options = defaultOptions) => {
 		setPrincipal(principal);
 
 		setAuthClient(client);
+
+		const actor = createActor(canisterId, {
+			agentOptions: {
+				identity,
+			},
+		});
+
+		setBackendActor(actor);
 	}
 
 	async function logout() {
