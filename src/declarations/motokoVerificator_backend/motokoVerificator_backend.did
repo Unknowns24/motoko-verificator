@@ -4,6 +4,7 @@ type Verifier =
    deleteMyProfile: () -> (Result);
    imRegistered: () -> (bool);
    seeAProfile: (principal) -> (Result_1) query;
+   seeMyProfile: () -> (Result_1) query;
    test: (principal) -> (TestResult);
    updateMyProfile: (StudentProfile) -> (Result);
    verifyOwnership: (principal, principal) -> (bool);

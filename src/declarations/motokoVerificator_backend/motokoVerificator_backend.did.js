@@ -16,6 +16,7 @@ export const idlFactory = ({ IDL }) => {
     'deleteMyProfile' : IDL.Func([], [Result], []),
     'imRegistered' : IDL.Func([], [IDL.Bool], []),
     'seeAProfile' : IDL.Func([IDL.Principal], [Result_1], ['query']),
+    'seeMyProfile' : IDL.Func([], [Result_1], ['query']),
     'test' : IDL.Func([IDL.Principal], [TestResult], []),
     'updateMyProfile' : IDL.Func([StudentProfile], [Result], []),
     'verifyOwnership' : IDL.Func(

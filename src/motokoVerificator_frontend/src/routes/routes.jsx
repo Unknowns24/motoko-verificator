@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import { AuthRoute } from "@validations/RoutesValidation";
+import { AuthRoute, RegisteredRoute } from "@validations/RoutesValidation";
 
 import Home from "@pages/Home";
 import Verificator from "@pages/Verificator";
@@ -17,7 +17,9 @@ const Router = () => {
 				exact
 				element={
 					<AuthRoute>
-						<Verificator />
+						<RegisteredRoute>
+							<Verificator />
+						</RegisteredRoute>
 					</AuthRoute>
 				}
 			/>
@@ -26,7 +28,9 @@ const Router = () => {
 				exact
 				element={
 					<AuthRoute>
-						<Profile />
+						<RegisteredRoute>
+							<Profile />
+						</RegisteredRoute>
 					</AuthRoute>
 				}
 			/>

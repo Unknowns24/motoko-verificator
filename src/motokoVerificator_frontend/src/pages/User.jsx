@@ -12,7 +12,7 @@ const User = () => {
 
 	useEffect(() => {
 		const verifyRegistered = async () => {
-			const isRegistered = false; //await backendActor.imRegistered();
+			const isRegistered = await backendActor.imRegistered();
 
 			if (isRegistered) {
 				navigate("/");

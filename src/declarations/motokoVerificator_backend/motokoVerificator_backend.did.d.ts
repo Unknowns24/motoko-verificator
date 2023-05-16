@@ -19,6 +19,7 @@ export interface Verifier {
   'deleteMyProfile' : ActorMethod<[], Result>,
   'imRegistered' : ActorMethod<[], boolean>,
   'seeAProfile' : ActorMethod<[Principal], Result_1>,
+  'seeMyProfile' : ActorMethod<[], Result_1>,
   'test' : ActorMethod<[Principal], TestResult>,
   'updateMyProfile' : ActorMethod<[StudentProfile], Result>,
   'verifyOwnership' : ActorMethod<[Principal, Principal], boolean>,

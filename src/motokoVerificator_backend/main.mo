@@ -75,6 +75,20 @@ actor class Verifier() {
     }
   };
 
+  public shared query ({ caller }) func seeMyProfile() : async Result.Result<StudentProfile, Text> {
+    var xProfile : ?StudentProfile = studentProfileStore.get(caller);
+
+    switch (xProfile) {
+      case null { 
+        return #err ("There is no profile registered with the received account");
+      };
+
+      case (?profile) {
+        return #ok profile
+      };
+    }
+  };
+
   public shared ({ caller }) func updateMyProfile(profile : StudentProfile) : async Result.Result<(), Text> {
     if (Principal.isAnonymous(caller)) {
       return #err "You must be Logged In"
