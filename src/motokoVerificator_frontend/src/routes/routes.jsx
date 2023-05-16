@@ -6,6 +6,7 @@ import Home from "@pages/Home";
 import Verificator from "@pages/Verificator";
 import Profile from "@pages/Profile";
 import Error404 from "@pages/Error/404";
+import User from "@pages/User";
 
 const Router = () => {
 	return (
@@ -34,7 +35,7 @@ const Router = () => {
 				exact
 				element={
 					<AuthRoute>
-						<Profile />
+						<User />
 					</AuthRoute>
 				}
 			/>

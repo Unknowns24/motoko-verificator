@@ -2,6 +2,7 @@ type Verifier =
  service {
    addMyProfile: (StudentProfile) -> (Result);
    deleteMyProfile: () -> (Result);
+   imRegistered: () -> (bool);
    seeAProfile: (principal) -> (Result_1) query;
    test: (principal) -> (TestResult);
    updateMyProfile: (StudentProfile) -> (Result);

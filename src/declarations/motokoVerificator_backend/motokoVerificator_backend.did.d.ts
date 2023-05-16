@@ -17,6 +17,7 @@ export type TestResult = { 'ok' : null } |
 export interface Verifier {
   'addMyProfile' : ActorMethod<[StudentProfile], Result>,
   'deleteMyProfile' : ActorMethod<[], Result>,
+  'imRegistered' : ActorMethod<[], boolean>,
   'seeAProfile' : ActorMethod<[Principal], Result_1>,
   'test' : ActorMethod<[Principal], TestResult>,
   'updateMyProfile' : ActorMethod<[StudentProfile], Result>,

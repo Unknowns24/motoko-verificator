@@ -1,11 +1,13 @@
 import React from "react";
 import { FaBars } from "react-icons/fa";
-import { Nav, NavbarContainer, NavLogo, MobileIcon, NavMenu, NavItem, NavLinks, Logo, NavButton, NavBtn } from "./NavbarElements";
 import { useAuth } from "@hooks/useAuth";
+import { Nav, NavbarContainer, NavLogo, MobileIcon, NavMenu, NavItem, NavLinks, Logo, NavButton, NavBtn } from "./NavbarElements";
+import { useNavigate } from "react-router-dom";
 import LogoImg from "@images/logo.png";
 
 const Navbar = ({ toggle }) => {
 	const { isAuthenticated, logout, login } = useAuth();
+	const navigate = useNavigate();
 
 	return (
 		<>
@@ -32,12 +34,12 @@ const Navbar = ({ toggle }) => {
 							</NavMenu>
 
 							<NavButton>
-								<NavBtn onClick={logout}>Logout</NavBtn>
+								<NavBtn onClick={() => logout(navigate)}>Logout</NavBtn>
 							</NavButton>
 						</>
 					) : (
 						<NavButton>
-							<NavBtn onClick={login}>Login</NavBtn>
+							<NavBtn onClick={() => login(navigate)}>Login</NavBtn>
 						</NavButton>
 					)}
 				</NavbarContainer>
