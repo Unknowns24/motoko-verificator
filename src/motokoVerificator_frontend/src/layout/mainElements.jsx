@@ -17,7 +17,21 @@ export const CenteredHomeContainer = styled.div`
 	height: calc(100vh - 80px);
 
 	@media screen and (max-width: 1280px) {
-		//
+		display: grid;
+		height: auto;
+		grid-template-columns: 1fr 1fr 1fr;
+	}
+
+	@media screen and (max-width: 905px) {
+		display: grid;
+		height: auto;
+		grid-template-columns: 1fr 1fr;
+	}
+
+	@media screen and (max-width: 626px) {
+		display: flex;
+		flex-direction: column;
+		height: auto;
 	}
 `;
 
