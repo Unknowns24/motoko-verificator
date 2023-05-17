@@ -22,12 +22,35 @@ const RegisterForm = () => {
 		if (disabled) return;
 
 		setDisabled(true);
+
+		toast.info("Registering...", {
+			position: "bottom-right",
+			autoClose: 2000,
+			hideProgressBar: true,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true,
+			progress: undefined,
+			theme: "dark",
+		});
+
 		let team = Math.floor(Math.random() * teams.length);
 
 		await backendActor.addMyProfile({
 			name: name,
 			team: teams.at(team),
 			graduate: false,
+		});
+
+		toast.success("Account registered!", {
+			position: "bottom-right",
+			autoClose: 2000,
+			hideProgressBar: true,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true,
+			progress: undefined,
+			theme: "dark",
 		});
 
 		navigate("/");

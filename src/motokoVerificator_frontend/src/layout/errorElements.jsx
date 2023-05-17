@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const ErrorContainer = styled.div`
 	position: relative;
@@ -83,5 +84,33 @@ export const ErrorText = styled.h2`
 
 	@media screen and (max-width: 480px) {
 		font-size: 16px;
+	}
+`;
+
+export const ErrorBtnContainer = styled.div`
+	width: 100%;
+	display: flex;
+	justify-content: center;
+`;
+
+export const ErrorButton = styled.button`
+	border-radius: 50px;
+	background: #a72d83;
+	white-space: nowrap;
+	padding: 10px 22px;
+	color: #010606;
+	font-size: 16px;
+	outline: none;
+	border: none;
+	cursor: pointer;
+	transition: all 0.2s ease-in-out;
+	text-decoration: none;
+	margin-top: 25px;
+	max-width: 100px;
+
+	&:hover {
+		transition: all 0.2s ease-in-out;
+		background: #fff;
+		color: #010606;
 	}
 `;

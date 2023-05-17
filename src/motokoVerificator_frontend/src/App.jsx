@@ -1,7 +1,10 @@
 import React, { useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 import Router from "@routes/routes.jsx";
+
+import "react-toastify/dist/ReactToastify.css";
 
 /*
 	Helper component that prevent use links inside the app
@@ -17,9 +20,12 @@ const Wrapper = ({ children }) => {
 
 const App = () => {
 	return (
-		<Wrapper>
-			<Router />
-		</Wrapper>
+		<>
+			<Wrapper>
+				<Router />
+			</Wrapper>
+			<ToastContainer />
+		</>
 	);
 };
 
