@@ -9,6 +9,14 @@ export const CenteredContainer = styled.div`
 	height: 100vh;
 `;
 
+export const CenteredHomeContainer = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	height: calc(100vh - 80px);
+`;
+
 export const CardContainer = styled.div`
 	width: 90vw;
 	max-width: 400px;
