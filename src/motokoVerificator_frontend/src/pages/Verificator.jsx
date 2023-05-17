@@ -1,11 +1,12 @@
 import React from "react";
-import Navbar from "@components/Navbar/index";
+import WebPage from "@layout/mainElements";
 
 const Verificator = () => {
 	return (
 		<>
-			<Navbar />
-			<div>Verificator</div>
+			<WebPage>
+				<div>Verificator</div>
+			</WebPage>
 		</>
 	);
 };

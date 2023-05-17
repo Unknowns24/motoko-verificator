@@ -15,6 +15,10 @@ export const CenteredHomeContainer = styled.div`
 	align-items: center;
 
 	height: calc(100vh - 80px);
+
+	@media screen and (max-width: 1280px) {
+		//
+	}
 `;
 
 export const CardContainer = styled.div`
@@ -85,3 +89,29 @@ export const Logo = styled.img`
 	width: 90px;
 	height: 70px;
 `;
+
+import React, { useState } from "react";
+import Sidebar from "@components/Sidebar";
+import Navbar from "@components/Navbar";
+
+const WebPage = ({ children }) => {
+	const [isOpen, setIsOpen] = useState(false);
+
+	const toggle = () => {
+		setIsOpen(!isOpen);
+	};
+
+	window.scrollTo({
+		top: 0,
+	});
+
+	return (
+		<>
+			<Sidebar isOpen={isOpen} toggle={toggle} />
+			<Navbar toggle={toggle} />
+			{children}
+		</>
+	);
+};
+
+export default WebPage;

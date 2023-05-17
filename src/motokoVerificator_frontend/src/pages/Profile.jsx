@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "@components/Navbar/index";
+import WebPage from "@layout/mainElements";
 import { useAuth } from "@hooks/useAuth";
 
 const Profile = () => {
@@ -18,9 +18,10 @@ const Profile = () => {
 
 	return (
 		<>
-			<Navbar />
-			<div>Profile</div>
-			<div>{userData}</div>
+			<WebPage>
+				<div>Profile</div>
+				<div>{userData}</div>
+			</WebPage>
 		</>
 	);
 };

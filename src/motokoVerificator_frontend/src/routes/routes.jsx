@@ -13,7 +13,7 @@ const Router = () => {
 		<Routes>
 			<Route path="/" exact element={<Home />} />
 			<Route
-				path="/verificator"
+				path="/verificator/:Challenge"
 				exact
 				element={
 					<AuthRoute>
