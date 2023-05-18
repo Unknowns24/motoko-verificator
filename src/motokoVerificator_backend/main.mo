@@ -13,6 +13,7 @@ import Buffer "mo:base/Buffer";
 import Type "Types";
 import Ic "Ic";
 import Works "Works";
+import Iter "mo:base/Iter";
 
 actor class Verifier() {
   // Types
@@ -135,6 +136,24 @@ actor class Verifier() {
     };
   };
 
+  private func addPrincipalArray(arr : ?[Principal], p : Principal) : [Principal] {
+    switch(arr) {
+      case (null) return [p];
+      case (?existentArray) {
+        // Create a buffer with all the elements of the array
+        var principalBuff = Buffer.Buffer<Principal>(existentArray.size());
+        for (elem in existentArray.vals()) {
+          principalBuff.add(elem);
+        };
+
+        // Add the principal to the buffer
+        principalBuff.add(p);
+
+        return Buffer.toArray(principalBuff);
+      };
+    };
+  };
+
   // Works verifications
   public query func getSubmits() : async SubmitsResult {    
     let day1 = getArrayElements(daySubmitteds.get(1));
@@ -181,6 +200,10 @@ actor class Verifier() {
             graduate = true;
             team = profile.team;
           };
+
+          // Adding principal as in the specified day submits
+          var newArray = addPrincipalArray(daySubmitteds.get(day), caller);
+          ignore daySubmitteds.replace(day, newArray);
 
           ignore studentProfileStore.replace(caller, updatedStudent);
           return #ok ();      
