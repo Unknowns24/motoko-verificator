@@ -3,7 +3,7 @@ import { FaBars } from "react-icons/fa";
 import { useAuth } from "@hooks/useAuth";
 import { Nav, NavbarContainer, NavLogo, MobileIcon, NavMenu, NavItem, NavLinks, Logo, NavButton, NavBtn } from "./NavbarElements";
 import { useNavigate } from "react-router-dom";
-import LogoImg from "@images/logo.png";
+import LogoImg from "@images/dlogo.png";
 
 const Navbar = ({ toggle }) => {
 	const { isAuthenticated, logout, login } = useAuth();

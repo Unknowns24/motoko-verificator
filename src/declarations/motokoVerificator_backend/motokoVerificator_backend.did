@@ -2,23 +2,19 @@ type Verifier =
  service {
    addMyProfile: (StudentProfile) -> (Result);
    deleteMyProfile: () -> (Result);
+   getSubmits: () -> (SubmitsResult) query;
    imRegistered: () -> (bool);
    seeAProfile: (principal) -> (Result_1) query;
    seeMyProfile: () -> (Result_1) query;
-   test: (principal) -> (TestResult);
    updateMyProfile: (StudentProfile) -> (Result);
-   verifyOwnership: (principal, principal) -> (bool);
-   verifyWork: (principal, principal) -> (Result);
+   verifyWork: (principal, nat) -> (Result);
  };
-type TestResult = 
- variant {
-   err: TestError;
-   ok;
- };
-type TestError = 
- variant {
-   UnexpectedError: text;
-   UnexpectedValue: text;
+type SubmitsResult = 
+ record {
+   day1: nat;
+   day2: nat;
+   day3: nat;
+   day4: nat;
  };
 type StudentProfile = 
  record {

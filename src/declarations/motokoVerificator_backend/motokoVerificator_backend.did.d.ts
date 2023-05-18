@@ -10,19 +10,20 @@ export interface StudentProfile {
   'name' : string,
   'team' : string,
 }
-export type TestError = { 'UnexpectedValue' : string } |
-  { 'UnexpectedError' : string };
-export type TestResult = { 'ok' : null } |
-  { 'err' : TestError };
+export interface SubmitsResult {
+  'day1' : bigint,
+  'day2' : bigint,
+  'day3' : bigint,
+  'day4' : bigint,
+}
 export interface Verifier {
   'addMyProfile' : ActorMethod<[StudentProfile], Result>,
   'deleteMyProfile' : ActorMethod<[], Result>,
+  'getSubmits' : ActorMethod<[], SubmitsResult>,
   'imRegistered' : ActorMethod<[], boolean>,
   'seeAProfile' : ActorMethod<[Principal], Result_1>,
   'seeMyProfile' : ActorMethod<[], Result_1>,
-  'test' : ActorMethod<[Principal], TestResult>,
   'updateMyProfile' : ActorMethod<[StudentProfile], Result>,
-  'verifyOwnership' : ActorMethod<[Principal, Principal], boolean>,
-  'verifyWork' : ActorMethod<[Principal, Principal], Result>,
+  'verifyWork' : ActorMethod<[Principal, bigint], Result>,
 }
 export interface _SERVICE extends Verifier {}

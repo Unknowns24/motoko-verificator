@@ -15,10 +15,10 @@ const Home = () => {
 		<>
 			<WebPage>
 				<CenteredHomeContainer>
-					<AppCard title="calculator" link="/verificator/calculator" imgSrc={calcImg} counter={0} />
-					<AppCard title="hw diary" link="/verificator/homework-diary" imgSrc={hwDiaryImg} counter={0} />
-					<AppCard title="motocoin" link="/verificator/motocoin" imgSrc={coinImg} counter={0} />
-					<AppCard title="student wall" link="/verificator/student-wall" imgSrc={studentWallImg} counter={0} />
+					<AppCard title="calculator" link="/verificator?day=1" imgSrc={calcImg} counter={0} />
+					<AppCard title="hw diary" link="/verificator?day=2" imgSrc={hwDiaryImg} counter={0} />
+					<AppCard title="motocoin" link="/verificator?day=3" imgSrc={coinImg} counter={0} />
+					<AppCard title="student wall" link="/verificator?day=4" imgSrc={studentWallImg} counter={0} />
 				</CenteredHomeContainer>
 			</WebPage>
 		</>

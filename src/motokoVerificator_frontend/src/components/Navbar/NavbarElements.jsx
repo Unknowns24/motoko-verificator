@@ -24,6 +24,11 @@ export const NavbarContainer = styled.div`
 	z-index: 1;
 	width: 100%;
 	max-width: 1100px;
+
+	@media screen and (max-width: 1050px) {
+		padding-left: 25px;
+		padding-right: 25px;
+	}
 `;
 
 export const NavLogo = styled(Link)`
@@ -119,7 +124,7 @@ export const NavBtn = styled.button`
 `;
 
 export const Logo = styled.img`
-	width: 90px;
-	height: 70px;
+	width: 60px;
+	height: 30px;
 	margin-right: 5px;
 `;
