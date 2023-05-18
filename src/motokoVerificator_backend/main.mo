@@ -126,25 +126,37 @@ actor class Verifier() {
     return #ok ();
   };
 
-  // Works verifications
-  public query func getSubmits() : async SubmitsResult {
-    var day1 : Nat = 0;
-    var day2 : Nat = 0;
-    var day3 : Nat = 0;
-    var day4 : Nat = 0;
+  private func getArrayElements(arr : ?[Principal]) : [Principal] {
+    switch(arr) {
+      case (null) return [];
+      case (?existentArray) {
+        return existentArray
+      };
+    };
+  };
 
-    // Get principal array size of every day
+  // Works verifications
+  public query func getSubmits() : async SubmitsResult {    
+    let day1 = getArrayElements(daySubmitteds.get(1));
+    let day2 = getArrayElements(daySubmitteds.get(2));
+    let day3 = getArrayElements(daySubmitteds.get(3));
+    let day4 = getArrayElements(daySubmitteds.get(4));
 
     return {
-      day1 = day1;
-      day2 = day2;
-      day3 = day3;
-      day4 = day4;
+      day1 = day1.size();
+      day2 = day2.size();
+      day3 = day3.size();
+      day4 = day4.size();
     }
   };
 
   public shared ({ caller }) func verifyWork(canisterId : Principal, day: Nat) : async Result.Result<(), Text> {
     try {
+      if (day < 1 or day > 4) {
+        return #err("Invalid project day");
+      };
+
+      // Check if work owner and functionability
       let isApproved = await Works.test(canisterId, day); 
 
       if (isApproved != #ok) {
@@ -157,12 +169,11 @@ actor class Verifier() {
         return #err ("The received work owner does not match with the received principal");
       };
 
+      //validate if user is registered
       var xProfile : ?StudentProfile = studentProfileStore.get(caller);
 
       switch (xProfile) {
-        case null { 
-          return #err("The received principal does not belongs to a registered student");
-        };
+        case (null) return #err("The received principal does not belongs to a registered student");
 
         case (?profile) {
           var updatedStudent = {
