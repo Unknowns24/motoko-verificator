@@ -12,12 +12,23 @@ import Buffer "mo:base/Buffer";
 
 import Type "Types";
 import Ic "Ic";
+import Works "Works";
 
 actor class Verifier() {
+  // Types
   type StudentProfile = Type.StudentProfile;
+  public type TestResult = Type.TestResult;
+  public type TestError = Type.TestError;
+  public type SubmitsResult = Type.SubmitsResult;
 
+  //function to hash nats (needed for a hashmap with Nat as a Key)
+  private func _hashNat(n : Nat) : Hash.Hash = return Text.hash(Nat.toText(n));
+
+  // HashMaps declarations
+  let daySubmitteds = HashMap.HashMap<Nat, [Principal]>(0, Nat.equal, _hashNat);
   let studentProfileStore = HashMap.HashMap<Principal, StudentProfile>(0, Principal.equal, Principal.hash);
 
+  // Profile stuff
   private func isRegistered(p : Principal) : Bool {
     var xProfile : ?StudentProfile = studentProfileStore.get(p);
 
@@ -45,8 +56,6 @@ actor class Verifier() {
       };
     }
   };
-
-  // STEP 1 - BEGIN
 
   public shared ({ caller }) func addMyProfile(profile : StudentProfile) : async Result.Result<(), Text> {
     if (Principal.isAnonymous(caller)) {
@@ -117,73 +126,38 @@ actor class Verifier() {
     return #ok ();
   };
 
-  // STEP 2 - BEGIN
-  public type TestResult = Type.TestResult;
-  public type TestError = Type.TestError;
+  // Works verifications
+  public query func getSubmits() : async SubmitsResult {
+    var day1 : Nat = 0;
+    var day2 : Nat = 0;
+    var day3 : Nat = 0;
+    var day4 : Nat = 0;
 
-  public func test(canisterId : Principal) : async TestResult {
-    let calculatorInterface = actor(Principal.toText(canisterId)) : actor {
-      reset : shared () -> async Int;
-      add : shared (x : Nat) -> async Int;
-      sub : shared (x : Nat) -> async Int;
-    };
+    // Get principal array size of every day
 
-    try {
-      let x1 : Int = await calculatorInterface.reset();
-      if (x1 != 0) {
-        return #err(#UnexpectedValue("After a reset, counter should be 0!"));
-      };
-
-      let x2 : Int = await calculatorInterface.add(2);
-      if (x2 != 2) {
-        return #err(#UnexpectedValue("After 0 + 2, counter should be 2!"));
-      };
-
-      let x3 : Int = await calculatorInterface.sub(2);
-      if (x3 != 0) {
-        return #err(#UnexpectedValue("After 2 - 2, counter should be 0!"));
-      };
-
-      return #ok ();
-    } catch (e) {
-      return #err(#UnexpectedError("Something went wrong!"));
-    } 
-  };
-
-
-  // STEP 3 - BEGIN
-  public func verifyOwnership(canisterId : Principal, p : Principal) : async Bool {
-    try {
-      let controllers = await Ic.getCanisterControllers(canisterId);
-
-      var isOwner : ?Principal = Array.find<Principal>(controllers, func prin = prin == p);
-      
-      if (isOwner != null) {
-        return true;
-      };
-
-      return false;
-    } catch (e) {
-      return false;
+    return {
+      day1 = day1;
+      day2 = day2;
+      day3 = day3;
+      day4 = day4;
     }
   };
 
-  // STEP 4 - BEGIN
-  public shared ({ caller }) func verifyWork(canisterId : Principal, p : Principal) : async Result.Result<(), Text> {
+  public shared ({ caller }) func verifyWork(canisterId : Principal, day: Nat) : async Result.Result<(), Text> {
     try {
-      let isApproved = await test(canisterId); 
+      let isApproved = await Works.test(canisterId, day); 
 
       if (isApproved != #ok) {
         return #err("The current work has no passed the tests");
       };
 
-      let isOwner = await verifyOwnership(canisterId, p); 
+      let isOwner = await Works.verifyOwnership(canisterId, caller); 
 
       if (not isOwner) {
         return #err ("The received work owner does not match with the received principal");
       };
 
-      var xProfile : ?StudentProfile = studentProfileStore.get(p);
+      var xProfile : ?StudentProfile = studentProfileStore.get(caller);
 
       switch (xProfile) {
         case null { 
@@ -197,7 +171,7 @@ actor class Verifier() {
             team = profile.team;
           };
 
-          ignore studentProfileStore.replace(p, updatedStudent);
+          ignore studentProfileStore.replace(caller, updatedStudent);
           return #ok ();      
         }
       };
