@@ -114,6 +114,59 @@ export const Logo = styled.img`
 	height: 70px;
 `;
 
+export const selectCustomStyles = {
+	control: (base, state) => ({
+		...base,
+		background: "rgba(0, 0, 0, 0.15)",
+		borderRadius: state.isFocused ? "3px 3px 0 0" : "none",
+		borderColor: state.isFocused ? "#a72d83" : "black",
+		boxShadow: null,
+		color: "#fff",
+		"&:hover": {
+			borderColor: state.isFocused ? "#a72d83" : "black",
+		},
+	}),
+	menu: (base) => ({
+		...base,
+		borderRadius: 0,
+		marginTop: 0,
+		background: "#222232",
+	}),
+	menuList: (base) => ({
+		...base,
+		padding: 0,
+		background: "#222232",
+	}),
+	option: (provided, state) => ({
+		...provided,
+		backgroundColor: state.isSelected ? "#a72d83" : "#222232",
+
+		"&:hover": {
+			backgroundColor: state.isFocused ? "#a72d8291" : "#222232",
+		},
+	}),
+	placeholder: (base) => ({
+		...base,
+		color: "#fff",
+	}),
+	input: (base) => ({
+		...base,
+		color: "#fff",
+	}),
+	singleValue: (base) => ({
+		...base,
+		color: "#fff",
+	}),
+	valueContainer: (base) => ({
+		...base,
+		color: "#fff",
+	}),
+	container: (base) => ({
+		...base,
+		color: "#fff",
+	}),
+};
+
 import React, { useState } from "react";
 import Sidebar from "@components/Sidebar";
 import Navbar from "@components/Navbar";
