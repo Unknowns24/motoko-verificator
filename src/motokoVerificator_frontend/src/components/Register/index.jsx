@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useAuth } from "@hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { CenteredContainer, CardContainer, CardInput, CardButton, CardLogo, Logo } from "@layout/mainElements";
+import { CenteredContainer, CardContainer, CardInput, CardButton, CardLogo, Logo, toastDefaultStyle } from "@layout/mainElements";
 
 import LogoImg from "@images/logo.png";
 
@@ -24,16 +24,7 @@ const RegisterForm = () => {
 
 		setDisabled(true);
 
-		toast.info("Registering...", {
-			position: "bottom-right",
-			autoClose: 2000,
-			hideProgressBar: true,
-			closeOnClick: true,
-			pauseOnHover: true,
-			draggable: true,
-			progress: undefined,
-			theme: "dark",
-		});
+		toast.info("Registering...", toastDefaultStyle);
 
 		let team = Math.floor(Math.random() * teams.length);
 
@@ -44,16 +35,7 @@ const RegisterForm = () => {
 			progress: 0,
 		});
 
-		toast.success("Account registered!", {
-			position: "bottom-right",
-			autoClose: 2000,
-			hideProgressBar: true,
-			closeOnClick: true,
-			pauseOnHover: true,
-			draggable: true,
-			progress: undefined,
-			theme: "dark",
-		});
+		toast.success("Account registered!", toastDefaultStyle);
 
 		navigate("/");
 	};

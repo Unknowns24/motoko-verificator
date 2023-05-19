@@ -167,6 +167,17 @@ export const selectCustomStyles = {
 	}),
 };
 
+export const toastDefaultStyle = {
+	position: "bottom-right",
+	autoClose: 2000,
+	hideProgressBar: true,
+	closeOnClick: true,
+	pauseOnHover: true,
+	draggable: true,
+	progress: undefined,
+	theme: "dark",
+};
+
 import React, { useState } from "react";
 import Sidebar from "@components/Sidebar";
 import Navbar from "@components/Navbar";

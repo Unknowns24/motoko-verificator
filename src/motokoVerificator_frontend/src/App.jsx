@@ -21,10 +21,10 @@ const Wrapper = ({ children }) => {
 const App = () => {
 	return (
 		<>
+			<ToastContainer style={{ fontSize: "0.875rem" }} />
 			<Wrapper>
 				<Router />
 			</Wrapper>
-			<ToastContainer />
 		</>
 	);
 };
