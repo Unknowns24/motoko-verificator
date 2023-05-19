@@ -71,6 +71,16 @@ export const CardInput = styled.input`
 	}
 `;
 
+export const CardTitle = styled.h2`
+	color: #a89ec9;
+	font-size: 1.1rem;
+`;
+
+export const CardLabel = styled.p`
+	color: #a89ec9;
+	font-size: 0.95rem;
+`;
+
 export const CardLogo = styled.div`
 	width: 100%;
 	display: flex;
