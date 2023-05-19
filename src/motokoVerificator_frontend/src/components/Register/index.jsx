@@ -41,6 +41,7 @@ const RegisterForm = () => {
 			name: name,
 			team: teams.at(team),
 			graduate: false,
+			progress: 0,
 		});
 
 		toast.success("Account registered!", {
