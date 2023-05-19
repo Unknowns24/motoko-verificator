@@ -127,10 +127,8 @@ actor class Verifier() {
     return #ok ();
   };
 
-  
-
   // Works verifications
-  public query func getSubmits() : async SubmitsResult {    
+  public shared query func getDaysSubmits() : async SubmitsResult {    
     let day1 = Utils.getPrincipalArrayElements(daySubmitteds.get(1));
     let day2 = Utils.getPrincipalArrayElements(daySubmitteds.get(2));
     let day3 = Utils.getPrincipalArrayElements(daySubmitteds.get(3));

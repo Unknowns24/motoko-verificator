@@ -7,10 +7,17 @@ const Profile = () => {
 	const [userData, setUserData] = useState("");
 
 	useEffect(() => {
+		function toObject(x) {
+			return JSON.stringify(
+				x,
+				(key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
+			);
+		}
+
 		const getMyData = async () => {
 			const res = await backendActor.seeMyProfile();
 
-			setUserData(JSON.stringify(res));
+			setUserData(toObject(res));
 		};
 
 		getMyData();

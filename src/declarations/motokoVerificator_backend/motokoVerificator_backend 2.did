@@ -2,8 +2,8 @@ type Verifier =
  service {
    addMyProfile: (StudentProfile) -> (Result);
    deleteMyProfile: () -> (Result);
-   getDaysSubmits: () -> (SubmitsResult) query;
-   imRegistered: () -> (bool) query;
+   getSubmits: () -> (SubmitsResult) query;
+   imRegistered: () -> (bool);
    seeAProfile: (principal) -> (Result_1) query;
    seeMyProfile: () -> (Result_1) query;
    updateMyProfile: (StudentProfile) -> (Result);
@@ -20,7 +20,6 @@ type StudentProfile =
  record {
    graduate: bool;
    name: text;
-   progress: nat;
    team: text;
  };
 type Result_1 = 

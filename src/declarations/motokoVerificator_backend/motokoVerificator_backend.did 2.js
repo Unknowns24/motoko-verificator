@@ -3,7 +3,6 @@ export const idlFactory = ({ IDL }) => {
     'graduate' : IDL.Bool,
     'name' : IDL.Text,
     'team' : IDL.Text,
-    'progress' : IDL.Nat,
   });
   const Result = IDL.Variant({ 'ok' : IDL.Null, 'err' : IDL.Text });
   const SubmitsResult = IDL.Record({
@@ -16,8 +15,8 @@ export const idlFactory = ({ IDL }) => {
   const Verifier = IDL.Service({
     'addMyProfile' : IDL.Func([StudentProfile], [Result], []),
     'deleteMyProfile' : IDL.Func([], [Result], []),
-    'getDaysSubmits' : IDL.Func([], [SubmitsResult], ['query']),
-    'imRegistered' : IDL.Func([], [IDL.Bool], ['query']),
+    'getSubmits' : IDL.Func([], [SubmitsResult], ['query']),
+    'imRegistered' : IDL.Func([], [IDL.Bool], []),
     'seeAProfile' : IDL.Func([IDL.Principal], [Result_1], ['query']),
     'seeMyProfile' : IDL.Func([], [Result_1], ['query']),
     'updateMyProfile' : IDL.Func([StudentProfile], [Result], []),

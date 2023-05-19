@@ -22,16 +22,24 @@ const Home = () => {
 	const [submits, setSubmits] = useState(initialState);
 
 	useEffect(() => {
-		const getSubmits = async () => {
-			let res = await backendActor.getSubmits();
+		function toObject(x) {
+			return JSON.parse(
+				JSON.stringify(
+					x,
+					(key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
+				)
+			);
+		}
 
-			if (res["ok"] !== undefined && res["ok"] !== null) {
-				setSubmits(res["ok"]);
+		const getSubmitsCount = async () => {
+			if (backendActor != null) {
+				const res = await backendActor.getDaysSubmits();
+				setSubmits(toObject(res));
 			}
 		};
 
-		getSubmits();
-	}, []);
+		getSubmitsCount();
+	}, [backendActor]);
 
 	return (
 		<>

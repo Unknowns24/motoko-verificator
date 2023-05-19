@@ -9,7 +9,6 @@ export interface StudentProfile {
   'graduate' : boolean,
   'name' : string,
   'team' : string,
-  'progress' : bigint,
 }
 export interface SubmitsResult {
   'day1' : bigint,
@@ -20,7 +19,7 @@ export interface SubmitsResult {
 export interface Verifier {
   'addMyProfile' : ActorMethod<[StudentProfile], Result>,
   'deleteMyProfile' : ActorMethod<[], Result>,
-  'getDaysSubmits' : ActorMethod<[], SubmitsResult>,
+  'getSubmits' : ActorMethod<[], SubmitsResult>,
   'imRegistered' : ActorMethod<[], boolean>,
   'seeAProfile' : ActorMethod<[Principal], Result_1>,
   'seeMyProfile' : ActorMethod<[], Result_1>,
