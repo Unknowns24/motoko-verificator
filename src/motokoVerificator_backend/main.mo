@@ -7,13 +7,13 @@ import Array "mo:base/Array";
 import Text "mo:base/Text";
 import Nat "mo:base/Nat";
 import Int "mo:base/Int";
-import Timer "mo:base/Timer";
 import Buffer "mo:base/Buffer";
-
-import Type "Types";
-import Ic "Ic";
-import Works "Works";
 import Iter "mo:base/Iter";
+
+import Ic "Ic";
+import Type "Types";
+import Works "Works";
+import Utils "Utils";
 
 actor class Verifier() {
   // Types
@@ -44,7 +44,7 @@ actor class Verifier() {
     }
   };
 
-  public shared ({ caller }) func imRegistered() : async Bool {
+  public shared query ({ caller }) func imRegistered() : async Bool {
     var xProfile : ?StudentProfile = studentProfileStore.get(caller);
 
     switch (xProfile) {
@@ -127,39 +127,14 @@ actor class Verifier() {
     return #ok ();
   };
 
-  private func getArrayElements(arr : ?[Principal]) : [Principal] {
-    switch(arr) {
-      case (null) return [];
-      case (?existentArray) {
-        return existentArray
-      };
-    };
-  };
-
-  private func addPrincipalArray(arr : ?[Principal], p : Principal) : [Principal] {
-    switch(arr) {
-      case (null) return [p];
-      case (?existentArray) {
-        // Create a buffer with all the elements of the array
-        var principalBuff = Buffer.Buffer<Principal>(existentArray.size());
-        for (elem in existentArray.vals()) {
-          principalBuff.add(elem);
-        };
-
-        // Add the principal to the buffer
-        principalBuff.add(p);
-
-        return Buffer.toArray(principalBuff);
-      };
-    };
-  };
+  
 
   // Works verifications
   public query func getSubmits() : async SubmitsResult {    
-    let day1 = getArrayElements(daySubmitteds.get(1));
-    let day2 = getArrayElements(daySubmitteds.get(2));
-    let day3 = getArrayElements(daySubmitteds.get(3));
-    let day4 = getArrayElements(daySubmitteds.get(4));
+    let day1 = Utils.getPrincipalArrayElements(daySubmitteds.get(1));
+    let day2 = Utils.getPrincipalArrayElements(daySubmitteds.get(2));
+    let day3 = Utils.getPrincipalArrayElements(daySubmitteds.get(3));
+    let day4 = Utils.getPrincipalArrayElements(daySubmitteds.get(4));
 
     return {
       day1 = day1.size();
@@ -195,15 +170,19 @@ actor class Verifier() {
         case (null) return #err("The received principal does not belongs to a registered student");
 
         case (?profile) {
+          // Adding principal as in the specified day submits
+          var newArray = Utils.addPrincipalToArray(daySubmitteds.get(day), caller);
+          ignore daySubmitteds.replace(day, newArray);
+
+          // Getting student actual progress
+          let progress = Works.getActualProgress(Utils.hashValsToArray(daySubmitteds.vals()), caller);
+
           var updatedStudent = {
             name = profile.name;
-            graduate = true;
             team = profile.team;
+            graduate = progress.graduate;
+            progress = progress.progress;
           };
-
-          // Adding principal as in the specified day submits
-          var newArray = addPrincipalArray(daySubmitteds.get(day), caller);
-          ignore daySubmitteds.replace(day, newArray);
 
           ignore studentProfileStore.replace(caller, updatedStudent);
           return #ok ();      

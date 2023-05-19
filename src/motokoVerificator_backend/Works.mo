@@ -1,14 +1,18 @@
-import Principal "mo:base/Principal";
-import Array "mo:base/Array";
-
-import Type "Types";
-import Ic "Ic";
 import Nat "mo:base/Nat";
+import Array "mo:base/Array";
+import Principal "mo:base/Principal";
 
+import Ic "Ic";
+import Type "Types";
+import Utils "Utils";
+import Iter "mo:base/Iter";
 
 module {
+    type StudentProfile = Type.StudentProfile;
     public type TestResult = Type.TestResult;
     public type TestError = Type.TestError;
+    public type WorkProgress = Type.WorkProgress;
+    public type WorkProgressArgs = Type.WorkProgressArgs;
 
     public func test(canisterId : Principal, day: Nat) : async TestResult {
         let calculatorInterface = actor(Principal.toText(canisterId)) : actor {
@@ -73,5 +77,28 @@ module {
         } catch (e) {
             return false;
         }
-  };
+    };
+
+    public func getActualProgress(days : [[Principal]], user : Principal) : WorkProgress {
+        var completedDays = 0;
+        var totalDays = days.size();
+
+        // prevent 0 division !!!
+        if (totalDays == 0) {
+            totalDays += 1;
+        }; 
+
+        for(dayArray in days.vals()) {
+            let dayCompleted = Utils.isPrincipalInNotOptionalArray(dayArray, user);
+
+            if (dayCompleted) {
+                completedDays += 1;
+            }
+        };
+
+        return {
+            progress = (completedDays * 100) / totalDays;
+            graduate = completedDays == totalDays;
+        }
+    };
 }
