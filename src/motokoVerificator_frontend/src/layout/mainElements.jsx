@@ -170,7 +170,7 @@ export const selectCustomStyles = {
 
 export const toastDefaultStyle = {
 	position: "bottom-right",
-	autoClose: 2000,
+	autoClose: 4000,
 	hideProgressBar: true,
 	closeOnClick: true,
 	pauseOnHover: true,

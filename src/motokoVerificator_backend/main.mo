@@ -188,7 +188,7 @@ actor class Verifier() {
         }
       };
     } catch(e) {
-      return #err("Cannot verify the project: " # Error.message(e));
+      return #err(Error.message(e));
     }
   };
 };
