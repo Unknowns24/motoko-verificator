@@ -156,7 +156,7 @@ actor class Verifier() {
           };
 
           // Check if user have not already completed that day
-          let haveCompletedThisDay = Utils.isPrincipalInArray(daySubmitteds.get(1), caller);
+          let haveCompletedThisDay = Utils.isPrincipalInArray(daySubmitteds.get(day), caller);
 
           if (haveCompletedThisDay) {
             return #err ("Day already submited");
