@@ -1,5 +1,6 @@
 import Result "mo:base/Result";
 import Principal "mo:base/Principal";
+import Time "mo:base/Time";
 
 module {
   public type StudentProfile = {
@@ -33,5 +34,48 @@ module {
   public type TestError = {
     #UnexpectedValue : Text;
     #UnexpectedError : Text;
+  };
+
+  /*
+   Needed types for testing
+   all the days answers
+  */
+  
+  // day 2
+  public type Homework = {
+    title : Text;
+    description : Text;
+    dueDate : Time.Time;
+    completed : Bool;
+  };
+
+  // day 3 
+  public type Content = {
+    #Text : Text;
+    #Image : Blob;
+    #Survey : Survey;
+  };
+
+  public type Message = {
+    content : Content;
+    vote : Int;
+    creator : Principal;
+  };
+
+  public type Answer = (
+    description : Text, 
+    numberOfVotes : Nat 
+  );
+
+  public type Survey = {
+    title : Text; 
+    answers : [Answer]; 
+  };
+
+  // day 4
+  public type Subaccount = Blob;
+  public type Account = {
+    owner : Principal;
+    subaccount : ?Subaccount;
   };
 };
