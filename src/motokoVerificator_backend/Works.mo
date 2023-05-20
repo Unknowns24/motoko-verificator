@@ -7,6 +7,7 @@ import Type "Types";
 import Utils "Utils";
 import Iter "mo:base/Iter";
 import Result "mo:base/Result";
+import Time "mo:base/Time";
 
 module {
     type StudentProfile = Type.StudentProfile;
@@ -68,27 +69,32 @@ module {
         try {
             // Calculator verification
             if (day == 1) {
+                // Reset test
                 await calculatorInterface.reset();
                 let resetRes : Float = await calculatorInterface.see();
                 if (resetRes != 0.0 and resetRes != 0) {
                     return #err(#UnexpectedValue("After a reset, counter should be 0!"));
                 };
 
+                // Add test
                 let addRes : Float = await calculatorInterface.add(2.5);
                 if (addRes != 2.5) {
                     return #err(#UnexpectedValue("After 0 + 2.5, counter should be 2.5!"));
                 };
 
+                // Sub test
                 let substractionRes : Float = await calculatorInterface.sub(0.5);
                 if (substractionRes != 2 and substractionRes != 2.0) {
                     return #err(#UnexpectedValue("After 2.5 - 0.5, counter should be 2.0!"));
                 };
 
+                // Multiplication test
                 let multiplicationRes : Float = await calculatorInterface.mul(2.0);
                 if (multiplicationRes != 4 and multiplicationRes != 4.0) {
                     return #err(#UnexpectedValue("After 2 * 2, counter should be 4!"));
                 };
 
+                // Division test
                 let divisionResult : ?Float = await calculatorInterface.div(2.0);
                 switch(divisionResult) {
                     case(null) {
@@ -101,17 +107,19 @@ module {
                     };
                 };
                
+                // Power test
                 let powerResult : Float = await calculatorInterface.power(8.0);
                 if (powerResult != 256 and powerResult != 256.0) {
                     return #err(#UnexpectedValue("After 2 ** 8, counter should be 256!"));
                 };
 
+                // Square test
                 let squareResult : Float = await calculatorInterface.sqrt();
                 if (squareResult != 16 and squareResult != 16.0) {
                     return #err(#UnexpectedValue("After square of 256, counter should be 16!"));
                 };
 
-                // add .3 to test the floor
+                // Floor test (add .3 to test the floor)
                 ignore await calculatorInterface.add(0.3);
                 let floorResult : Int = await calculatorInterface.floor();
                 if (floorResult != 16) {
@@ -123,6 +131,131 @@ module {
 
             // Homework diary verification
             if (day == 2) {
+                // helper functions
+                func equalsHomeworks(h1 : Homework, h2 : Homework) : Bool {
+                    return ((h1.title == h2.title) and (h1.description == h2.description) and (h1.dueDate == h2.dueDate) and (h1.completed == h2.completed))
+                };
+
+                func isHomeworkInArray(arr : [Homework], hw : Homework) : Bool {
+                    for(actualHw in arr.vals()) {
+                        if (equalsHomeworks(actualHw, hw)) {
+                            return true
+                        }
+                    };
+
+                    return false
+                };
+
+                func isHomeworkCompletedInArray(arr : [Homework]) : Bool {
+                    for(actualHw in arr.vals()) {
+                        if (actualHw.completed) {
+                            return true;
+                        }
+                    };
+
+                    return false;
+                };
+
+                // Add homework test
+                let tHw = { title = "Test"; description = "Description Text"; dueDate = Time.now(); completed = true; };
+
+                let hwIdRes : Nat = await hwDiaryInterface.addHomework(tHw);
+                let getHomeworkResult : Result.Result<Homework, Text> = await hwDiaryInterface.getHomework(hwIdRes);
+
+                switch(getHomeworkResult) {
+                    case (#ok(returnedHw)) {
+                        if (not equalsHomeworks(returnedHw, tHw)) {
+                            return #err(#UnexpectedValue("the added homework and the returned homeworks are not equals"));
+                        }
+                    };
+
+                    case (#err(errMsg)) {
+                        return #err(#UnexpectedValue(errMsg));
+                    };
+                };
+
+                // Update homework test
+                let updatedHw = { title = "Test after update"; description = "Descriptions Text after update"; dueDate = Time.now(); completed = false; };
+
+                ignore await hwDiaryInterface.updateHomework(hwIdRes, updatedHw);
+                let getUpdatedHomeworkResult : Result.Result<Homework, Text> = await hwDiaryInterface.getHomework(hwIdRes);
+
+                switch(getUpdatedHomeworkResult) {
+                    case (#ok(returnedHw)) {
+                        if (not equalsHomeworks(returnedHw, updatedHw)) {
+                            return #err(#UnexpectedValue("the updated homework and the returned homeworks are not equals"));
+                        }
+                    };
+
+                    case (#err(errMsg)) {
+                        return #err(#UnexpectedValue("Homework update error: " # errMsg));
+                    };
+                };
+
+                // Mark as completed test
+                ignore await hwDiaryInterface.markAsCompleted(hwIdRes);
+                let getCompletedHomework : Result.Result<Homework, Text> = await hwDiaryInterface.getHomework(hwIdRes);
+
+                switch(getCompletedHomework) {
+                    case (#ok(returnedHw)) {
+                        if (not returnedHw.completed) {
+                            return #err(#UnexpectedValue("Homework not completed after markAsCompleted!"));
+                        }
+                    };
+
+                    case (#err(errMsg)) {
+                        return #err(#UnexpectedValue("Homework complete error: " # errMsg));
+                    };
+                };
+                
+                // Get all homework test
+                let otherHw = { title = "Test3"; description = "Description Text3"; dueDate = Time.now(); completed = false; };
+
+                let otherHwId : Nat = await hwDiaryInterface.addHomework(otherHw);
+                let getAllHwResult : [Homework] = await hwDiaryInterface.getAllHomework();
+                
+                if (getAllHwResult.size() < 2) {
+                    return #err(#UnexpectedValue("Unexpected homework array size on getAllHomework!"));
+                };
+
+                // Get all pending homework test
+                let getAllPendingHwResult : [Homework] = await hwDiaryInterface.getPendingHomework();
+                
+                if (getAllPendingHwResult.size() < 1) {
+                    return #err(#UnexpectedValue("Unexpected homework array size on getPendingHomework!"));
+                };
+
+                if (isHomeworkCompletedInArray(getAllPendingHwResult)) {
+                    return #err(#UnexpectedValue("Completed homeworks should not be returned on getPendingHomework!"));
+                };
+                
+                // Search homework test
+                let searchHomeworkResult : [Homework] = await hwDiaryInterface.searchHomework(otherHw.description);
+
+                if (not isHomeworkInArray(searchHomeworkResult, otherHw)) {
+                    return #err(#UnexpectedValue("Homework search should match with the gived value!"));
+                };
+
+                let newSearchHomeworkResult : [Homework] = await hwDiaryInterface.searchHomework(otherHw.title#otherHw.description);
+
+                if (isHomeworkInArray(newSearchHomeworkResult, otherHw)) {
+                    return #err(#UnexpectedValue("Homework search should not match with the gived value!"));
+                };
+
+                // Delete homework test
+                ignore await hwDiaryInterface.deleteHomework(otherHwId);
+                let getDeleteddHomework : Result.Result<Homework, Text> = await hwDiaryInterface.getHomework(otherHwId);
+
+                switch(getDeleteddHomework) {
+                    case (#ok(returnedHw)) {
+                        if (equalsHomeworks(returnedHw, otherHw)) {
+                            return #err(#UnexpectedValue("Homework not deleted after deleteHomework!"));
+                        }
+                    };
+
+                    case (#err(errMsg)) { };
+                };
+
                 return #ok ();
             };
 
