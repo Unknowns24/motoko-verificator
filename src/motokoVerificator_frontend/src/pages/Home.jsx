@@ -47,8 +47,8 @@ const Home = () => {
 				<CenteredHomeContainer>
 					<AppCard title="calculator" link="/verificator?day=1" imgSrc={calcImg} counter={submits.day1} />
 					<AppCard title="hw diary" link="/verificator?day=2" imgSrc={hwDiaryImg} counter={submits.day2} />
-					<AppCard title="motocoin" link="/verificator?day=3" imgSrc={coinImg} counter={submits.day3} />
-					<AppCard title="student wall" link="/verificator?day=4" imgSrc={studentWallImg} counter={submits.day4} />
+					<AppCard title="student wall" link="/verificator?day=3" imgSrc={studentWallImg} counter={submits.day3} />
+					<AppCard title="motocoin" link="/verificator?day=4" imgSrc={coinImg} counter={submits.day4} />
 				</CenteredHomeContainer>
 			</WebPage>
 		</>
