@@ -111,7 +111,7 @@ export const CardButton = styled.button`
 `;
 
 export const Logo = styled.img`
-	margin-bottom: 10px;
+	margin-bottom: 25px;
 	width: 60px;
 	height: 30px;
 `;
