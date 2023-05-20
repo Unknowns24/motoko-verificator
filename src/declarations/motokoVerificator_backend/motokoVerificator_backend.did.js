@@ -1,5 +1,6 @@
 export const idlFactory = ({ IDL }) => {
   const StudentProfile = IDL.Record({
+    'cli' : IDL.Text,
     'graduate' : IDL.Bool,
     'name' : IDL.Text,
     'team' : IDL.Text,
@@ -21,7 +22,7 @@ export const idlFactory = ({ IDL }) => {
     'seeAProfile' : IDL.Func([IDL.Principal], [Result_1], ['query']),
     'seeMyProfile' : IDL.Func([], [Result_1], ['query']),
     'updateMyProfile' : IDL.Func([StudentProfile], [Result], []),
-    'verifyWork' : IDL.Func([IDL.Principal, IDL.Nat], [Result], []),
+    'verifyWork' : IDL.Func([IDL.Text, IDL.Nat], [Result], []),
   });
   return Verifier;
 };

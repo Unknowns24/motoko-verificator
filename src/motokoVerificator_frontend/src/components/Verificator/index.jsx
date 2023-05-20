@@ -43,14 +43,16 @@ const VerificatorComponent = () => {
 		setDisabled(true);
 
 		toast.info("Submitting...", toastDefaultStyle);
-		const res = await backendActor.verifyWork(canisterId, day);
+		const res = await backendActor.verifyWork(canisterId, parseInt(selectedDay));
 
 		if (res["ok"] !== undefined) {
 			toast.success("Day submitted!", toastDefaultStyle);
+			setDisabled(false);
 			return;
 		}
 
 		toast.error(res["err"], toastDefaultStyle);
+		setDisabled(false);
 	};
 
 	return (

@@ -6,6 +6,7 @@ export type Result = { 'ok' : null } |
 export type Result_1 = { 'ok' : StudentProfile } |
   { 'err' : string };
 export interface StudentProfile {
+  'cli' : string,
   'graduate' : boolean,
   'name' : string,
   'team' : string,
@@ -25,6 +26,6 @@ export interface Verifier {
   'seeAProfile' : ActorMethod<[Principal], Result_1>,
   'seeMyProfile' : ActorMethod<[], Result_1>,
   'updateMyProfile' : ActorMethod<[StudentProfile], Result>,
-  'verifyWork' : ActorMethod<[Principal, bigint], Result>,
+  'verifyWork' : ActorMethod<[string, bigint], Result>,
 }
 export interface _SERVICE extends Verifier {}

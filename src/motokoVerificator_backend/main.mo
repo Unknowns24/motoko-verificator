@@ -142,32 +142,32 @@ actor class Verifier() {
     }
   };
 
-  public shared ({ caller }) func verifyWork(canisterId : Principal, day: Nat) : async Result.Result<(), Text> {
+  public shared ({ caller }) func verifyWork(canisterId : Text, day: Nat) : async Result.Result<(), Text> {
     try {
-      if (day < 1 or day > 4) {
-        return #err("Invalid project day");
-      };
-
-      // Check if work owner and functionability
-      let isApproved = await Works.test(canisterId, day); 
-
-      if (isApproved != #ok) {
-        return #err("The current work has no passed the tests");
-      };
-
-      let isOwner = await Works.verifyOwnership(canisterId, caller); 
-
-      if (not isOwner) {
-        return #err ("The received work owner does not match with the received principal");
-      };
-
       //validate if user is registered
       var xProfile : ?StudentProfile = studentProfileStore.get(caller);
 
       switch (xProfile) {
-        case (null) return #err("The received principal does not belongs to a registered student");
+        case (null) return #err("Not a registered user");
 
         case (?profile) {
+          if (day < 1 or day > 4) {
+            return #err("Invalid project day");
+          };
+
+          // Check if work owner and functionability
+          let isApproved = await Works.test(Principal.fromText(canisterId), day); 
+
+          if (isApproved != #ok) {
+            return #err("The current work has no passed the tests");
+          };
+
+          let isOwner = await Works.verifyOwnership(Principal.fromText(canisterId), Principal.fromText(profile.cli)); 
+
+          if (not isOwner) {
+            return #err ("The received work owner does not match with the received principal");
+          };
+
           // Adding principal as in the specified day submits
           var newArray = Utils.addPrincipalToArray(daySubmitteds.get(day), caller);
           ignore daySubmitteds.replace(day, newArray);
@@ -176,6 +176,7 @@ actor class Verifier() {
           let progress = Works.getActualProgress(Utils.hashValsToArray(daySubmitteds.vals()), caller);
 
           var updatedStudent = {
+            cli = profile.cli;
             name = profile.name;
             team = profile.team;
             graduate = progress.graduate;
@@ -183,11 +184,11 @@ actor class Verifier() {
           };
 
           ignore studentProfileStore.replace(caller, updatedStudent);
-          return #ok ();      
+          return #ok ();
         }
       };
     } catch(e) {
-      return #err("Cannot verify the project");
+      return #err("Cannot verify the project: " # Error.message(e));
     }
   };
 };

@@ -10,13 +10,19 @@ const RegisterForm = () => {
 	const navigate = useNavigate();
 	const { backendActor } = useAuth();
 	const [name, setName] = useState("");
+	const [principal, setPrincipal] = useState("");
 	const [disabled, setDisabled] = useState(false);
 
 	const teams = ["poppy-parrots", "sassy-dolphins", "bitchy-beavers", "guiso-de-pollo", "pathetic-pinguin", "nuzzling-numbats", "squeeky-squirrels", "rowdy-raptors", "cozy-koalas", "douchbag-dragons", "crispy-chimpanzees"];
 
-	const handleInputChange = (e) => {
+	const handleNameInputChange = (e) => {
 		const value = e.target.value;
 		setName(value);
+	};
+
+	const handlePrincipalInputChange = (e) => {
+		const value = e.target.value;
+		setPrincipal(value);
 	};
 
 	const handleRegisterUser = async () => {
@@ -31,6 +37,7 @@ const RegisterForm = () => {
 		await backendActor.addMyProfile({
 			name: name,
 			team: teams.at(team),
+			cli: principal,
 			graduate: false,
 			progress: 0,
 		});
@@ -46,7 +53,8 @@ const RegisterForm = () => {
 				<CardLogo>
 					<Logo src={LogoImg} alt="logo" />
 				</CardLogo>
-				<CardInput type="text" value={name} placeholder="Username" onChange={handleInputChange} />
+				<CardInput type="text" value={name} placeholder="Username" onChange={handleNameInputChange} />
+				<CardInput type="text" value={principal} placeholder="Principal Id (CLI)" onChange={handlePrincipalInputChange} />
 				<CardButton onClick={handleRegisterUser}>Create user</CardButton>
 			</CardContainer>
 		</CenteredContainer>

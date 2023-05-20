@@ -1,7 +1,9 @@
 import Result "mo:base/Result";
+import Principal "mo:base/Principal";
 
 module {
   public type StudentProfile = {
+    cli : Text;
     name : Text;
     team : Text;
     graduate : Bool;

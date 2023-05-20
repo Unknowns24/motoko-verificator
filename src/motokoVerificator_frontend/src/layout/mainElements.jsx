@@ -64,6 +64,7 @@ export const CardInput = styled.input`
 	font-size: 1rem;
 	padding-left: 5px;
 	color: #d3d3d3;
+	margin-bottom: 5px;
 
 	&:hover {
 		background-color: rgba(0, 0, 0, 0.2);
