@@ -111,8 +111,9 @@ export const CardButton = styled.button`
 `;
 
 export const Logo = styled.img`
-	width: 90px;
-	height: 70px;
+	margin-bottom: 10px;
+	width: 60px;
+	height: 30px;
 `;
 
 export const selectCustomStyles = {

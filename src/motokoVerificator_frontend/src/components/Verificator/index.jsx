@@ -20,7 +20,7 @@ const VerificatorComponent = () => {
 	const day = searchParams.get("day");
 
 	const [canisterId, setCanisterId] = useState("");
-	const [selectedDay, setSelectedDay] = useState(day !== null && day >= 1 && day <= 4 ? { value: day.toString(), label: `Day ${day}` } : null);
+	const [selectedDay, setSelectedDay] = useState(day !== null && day >= 1 && day <= 4 ? day.toString() : null);
 	const [disabled, setDisabled] = useState(false);
 
 	const handleInputChange = (e) => {
@@ -64,7 +64,7 @@ const VerificatorComponent = () => {
 				<CardLabel>Canister Id</CardLabel>
 				<CardInput type="text" value={canisterId} onChange={handleInputChange} />
 				<CardLabel>Day</CardLabel>
-				<Select styles={selectCustomStyles} defaultValue={selectedDay} onChange={(e) => handleSelect(e)} options={options} />
+				<Select styles={selectCustomStyles} defaultValue={day !== null && day >= 1 && day <= 4 ? { value: day.toString(), label: `Day ${day}` } : null} onChange={(e) => handleSelect(e)} options={options} />
 				<CardButton onClick={handleSubmit}>Submit</CardButton>
 			</CardContainer>
 		</CenteredHomeContainer>

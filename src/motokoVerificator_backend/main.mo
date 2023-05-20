@@ -26,7 +26,7 @@ actor class Verifier() {
   private func _hashNat(n : Nat) : Hash.Hash = return Text.hash(Nat.toText(n));
 
   // HashMaps declarations
-  let daySubmitteds = HashMap.HashMap<Nat, [Principal]>(0, Nat.equal, _hashNat);
+  let daySubmitteds = HashMap.HashMap<Nat, [Principal]>(4, Nat.equal, _hashNat);
   let studentProfileStore = HashMap.HashMap<Principal, StudentProfile>(0, Principal.equal, Principal.hash);
 
   // Profile stuff
@@ -155,11 +155,25 @@ actor class Verifier() {
             return #err("Invalid project day");
           };
 
-          // Check if work owner and functionability
+          // Check if user have not already completed that day
+          let haveCompletedThisDay = Utils.isPrincipalInArray(daySubmitteds.get(1), caller);
+
+          if (haveCompletedThisDay) {
+            return #err ("Day already submited");
+          };
+
+          // Check if owner and functionability
           let isApproved = await Works.test(Principal.fromText(canisterId), day); 
 
-          if (isApproved != #ok) {
-            return #err("The current work has no passed the tests");
+          switch(isApproved) {
+            case (#err(#UnexpectedValue(errMsg))) {
+              return #err(errMsg);
+            };
+
+            case (#err(#UnexpectedError(errMsg))) {
+              return #err(errMsg);
+            };
+            case _ {};
           };
 
           let isOwner = await Works.verifyOwnership(Principal.fromText(canisterId), Principal.fromText(profile.cli)); 

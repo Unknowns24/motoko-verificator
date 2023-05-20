@@ -4,7 +4,7 @@ import { useAuth } from "@hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { CenteredContainer, CardContainer, CardInput, CardButton, CardLogo, Logo, toastDefaultStyle } from "@layout/mainElements";
 
-import LogoImg from "@images/logo.png";
+import LogoImg from "@images/dlogo.png";
 
 const RegisterForm = () => {
 	const navigate = useNavigate();
@@ -51,7 +51,7 @@ const RegisterForm = () => {
 		<CenteredContainer>
 			<CardContainer>
 				<CardLogo>
-					<Logo src={LogoImg} alt="logo" />
+					<Logo src={LogoImg} style={{ height: "30px", width: "60px" }} alt="logo" />
 				</CardLogo>
 				<CardInput type="text" value={name} placeholder="Username" onChange={handleNameInputChange} />
 				<CardInput type="text" value={principal} placeholder="Principal Id (CLI)" onChange={handlePrincipalInputChange} />
