@@ -8,6 +8,9 @@ import Utils "Utils";
 import Iter "mo:base/Iter";
 import Result "mo:base/Result";
 import Time "mo:base/Time";
+import Blob "mo:base/Blob";
+import Nat8 "mo:base/Nat8";
+import Error "mo:base/Error";
 
 module {
     type StudentProfile = Type.StudentProfile;
@@ -261,6 +264,144 @@ module {
 
             // Student wall verification
             if (day == 3) {
+                // helper functions 
+                func equalsMessages(m1 : Message, m2 : Message) : Bool {
+                    return (m1.content == m2.content) and (m1.vote == m2.vote) and (m1.creator == m2.creator)
+                };
+
+                func isMessageArrayRanked(arr : [Message]) : Bool {
+                    var firstTime : Bool = true;
+                    var lastValue : Int = 0;
+
+                    for(item in arr.vals()) {
+                        if (firstTime) {
+                            lastValue := item.vote;
+                        };
+
+                        if (item.vote > lastValue) {
+                            return false;
+                        };
+
+                        lastValue := item.vote;
+                    };
+
+                    return true;
+                };
+
+                // Write message test
+                let textMsgContent : Content = #Text "Message content";
+                let blobMsgContent : Content = #Image "\00\00\00\ff";
+                let surveyMsgContent : Content = #Survey {
+                    title = "Survey title";
+                    answers = [("answer description", 8)];
+                };
+
+                let msgTextId : Nat = await studentWallInterface.writeMessage(textMsgContent);
+                let msgBlobId : Nat = await studentWallInterface.writeMessage(blobMsgContent);
+                let msgSurveyId : Nat = await studentWallInterface.writeMessage(surveyMsgContent);
+                
+                var receivedMsg : Message = {creator = canisterId; vote = 0; content = #Text ""};
+
+                // Get message test
+                let getMessageResult : Result.Result<Message, Text> = await studentWallInterface.getMessage(msgTextId); 
+                switch(getMessageResult) {
+                    case (#ok(message)) {
+                        receivedMsg := message;
+                    };
+
+                    case (#err(errMsg)) {
+                        return #err(#UnexpectedValue("Could not get the message after create it"));
+                    }
+                };
+
+                if (receivedMsg.content != textMsgContent) {
+                    return #err(#UnexpectedValue("created message content and returned message content are not equals"));
+                };
+
+                // Update message test
+                ignore await studentWallInterface.updateMessage(msgTextId, blobMsgContent);
+
+                let getUpdatedMessageResult : Result.Result<Message, Text> = await studentWallInterface.getMessage(msgTextId); 
+                switch(getUpdatedMessageResult) {
+                    case (#ok(message)) {
+                        receivedMsg := message;
+                    };
+
+                    case (#err(errMsg)) {
+                        return #err(#UnexpectedValue("Could not get the message after update it"));
+                    }
+                };
+
+                if (receivedMsg.content != blobMsgContent) {
+                    return #err(#UnexpectedValue("updated message content and returned message content are not equals"));
+                };
+
+                // Up vote test
+                var votesBeforeUpVote : Int = receivedMsg.vote;
+                
+                ignore await studentWallInterface.upVote(msgTextId);
+                let getUpVotedMessageResult = await studentWallInterface.getMessage(msgTextId); 
+
+                switch(getUpVotedMessageResult) {
+                    case (#ok(message)) {
+                        receivedMsg := message;
+                    };
+
+                    case (#err(errMsg)) {
+                        return #err(#UnexpectedValue("Could not get the message after upVote it"));
+                    }
+                };
+                
+                if (receivedMsg.vote != votesBeforeUpVote + 1) {
+                    return #err(#UnexpectedValue("After upVote a message its votes should be increased by 1"));
+                };
+
+                // Down vote test
+                ignore await studentWallInterface.downVote(msgTextId);
+                let getDownVotedMessageResult = await studentWallInterface.getMessage(msgTextId); 
+
+                switch(getDownVotedMessageResult) {
+                    case (#ok(message)) {
+                        receivedMsg := message;
+                    };
+
+                    case (#err(errMsg)) {
+                        return #err(#UnexpectedValue("Could not get the message after downVote it"));
+                    }
+                };
+                
+                if (receivedMsg.vote != votesBeforeUpVote) {
+                    return #err(#UnexpectedValue("After downVote a message its votes should be decreased by 1"));
+                };
+
+                // Get all message test
+                let getAllMessagesResult : [Message] = await studentWallInterface.getAllMessages();
+
+                // Delete message test
+                let deleteMessageResult : Result.Result<(), Text> = await studentWallInterface.deleteMessage(msgTextId);
+                
+                switch(deleteMessageResult) {
+                    case (#ok()) {};
+
+                    case (#err(errMsg)) {
+                        return #err(#UnexpectedValue("After deleteMessage the message should be deleted!"));
+                    }
+                };
+
+                let updatedGetAllMessagesResult : [Message] = await studentWallInterface.getAllMessages();
+
+                if (updatedGetAllMessagesResult.size() != (getAllMessagesResult.size() - 1)) {
+                    return #err(#UnexpectedValue("After deleteMessage the message should be deleted!"));
+                };
+
+                // Get all message ranked test
+                ignore await studentWallInterface.upVote(msgBlobId);
+                let getRankedMessagesResult : [Message] = await studentWallInterface.getAllMessagesRanked();
+
+                if (not isMessageArrayRanked(getRankedMessagesResult)) {
+                    return #err(#UnexpectedValue("Ranked array is not ordered!"));
+                };
+
                 return #ok ();
             };
 
@@ -308,7 +449,7 @@ module {
 
             return #err(#UnexpectedError("Invalid day number!"));
         } catch (e) {
-            return #err(#UnexpectedError("Invalid Canister Id or the canister interface does not match with the day project interface!"));
+            return #err(#UnexpectedError(Error.message(e)));
         } 
     };
 
